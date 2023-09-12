@@ -4,35 +4,46 @@
         "title":"Calzas",
         "description":"Calza negra",
         "price":500,
-        "code":"1234"
+        "code":"1234",
+        "status":"true",
+        "category":"Calza"
+        
     },
     {
         "id":2,
         "title":"Medias",
         "description":"Media alta",
         "price":200,
-        "code":"3214"
+        "code":"3214",
+        "status":"true",
+        "category":"Medias"
     },
     {
         "id":3,
         "title":"Remera",
         "description":"Remera de colores",
         "price":350,
-        "code":"456"
+        "code":"456",
+        "status":"true",
+        "category":"Remera"
     },
     {
         "id":4,
         "title":"Tops",
         "description":"Tops con tiras",
         "price":400,
-        "code":"159"
+        "code":"159",
+        "status":"true",
+        "category":"Tops"
     },
     {
         "id":5,
         "title":"Short",
         "description":"Short negro",
         "price":600,
-        "code":"258"
+        "code":"258",
+        "status":"true",
+        "category":"Short"
     }
     
 ]
