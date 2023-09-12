@@ -1,0 +1,38 @@
+[
+    {
+        "id":1,
+        "title":"Calzas",
+        "description":"Calza negra",
+        "price":500,
+        "code":"1234"
+    },
+    {
+        "id":2,
+        "title":"Medias",
+        "description":"Media alta",
+        "price":200,
+        "code":"3214"
+    },
+    {
+        "id":3,
+        "title":"Remera",
+        "description":"Remera de colores",
+        "price":350,
+        "code":"456"
+    },
+    {
+        "id":4,
+        "title":"Tops",
+        "description":"Tops con tiras",
+        "price":400,
+        "code":"159"
+    },
+    {
+        "id":5,
+        "title":"Short",
+        "description":"Short negro",
+        "price":600,
+        "code":"258"
+    }
+    
+]
