@@ -6,14 +6,14 @@ import fs from "fs";
     };
 
     fileExist(){
-        return fstat.existsSync(this.pathFile);
+        return fs.existsSync(this.pathFiles);
     };
 
 
     async getCarts(){
         try {
             if(this.fileExist()){
-                const contenidoString = await fs.promises.readFile(this.pathFile,"utf-8");
+                const contenidoString = await fs.promises.readFile(this.pathFiles,"utf-8");
                 const carts = JSON.parse(contenidoString);
                 return carts;
             } else {
@@ -27,7 +27,7 @@ import fs from "fs";
     async createCart(){
         try{
             if(this.fileExist()){
-                const contenidoString = await fs.promises.readFile(this.pathFile,"utf-8");
+                const contenidoString = await fs.promises.readFile(this.pathFiles,"utf-8");
                 const carts =JSON.parse(contenidoString);
                 const newCart = {
                     id:1,

@@ -2,11 +2,11 @@ import fs from "fs";
 
 export class ProductsManagerFiles{
     constructor(path){
-        this.pathFile = path;
+        this.pathFiles = path;
     };
 
     fileExist(){
-        return fs.existsSync(this.pathFile);
+        return fs.existsSync(this.pathFiles);
     }
 
     async createProduct(productInfo){};

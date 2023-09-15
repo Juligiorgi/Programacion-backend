@@ -3,12 +3,12 @@ import {cartsService} from "../persistence/index.js"
 
 const router = Router();
 
-//http://localhost:8080/api/carts
+
 
 router.get("/", async(req,res) =>{
     try{
-       await cartsService.createCart();
-        
+       const carts= await cartsService.getCarts();
+       res.json({data:carts});
     }catch(error){
         res.json({error:error.message});
     }

@@ -18,19 +18,16 @@ router.post("/", async(req,res) =>{
 })
 
  
-router.get("/",async (req,res) =>{
+router.get("/:pid",async (req,res) =>{
     try{
         const productId = parseInt(req.params.pid);
         const product = await productsService.getProductById(productId);
-        res.json({message:"endpoint para obtener un producto", data:product});
+        res.json({message:"finalizar para obtener un producto", data:product});
     }catch (error){
         res.json({status:"error", message:error.message})
     }
     
 });
 
-router.get("/:pid", (req,res)=>{
-    res.json({message:"endpoint para obtener un producto"});
-});
 
 export {router as productsRouter};

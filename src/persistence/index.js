@@ -5,8 +5,8 @@ import path from "path";
 
 
 
-const productsService = new ProductsManagerFiles(path.join(__dirname,"/files/products.json"));
-const cartsService = new CartsManagerFiles(path.join(__dirname,"/files/carts.json"));
+export const productsService = new ProductsManagerFiles(path.join(__dirname,"/files/products.json"));
+export const cartsService = new CartsManagerFiles(path.join(__dirname,"/files/carts.json"));
 
 
 
