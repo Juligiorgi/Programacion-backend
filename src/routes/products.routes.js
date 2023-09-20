@@ -1,10 +1,11 @@
 import { Router } from "express";
-import {productsService} from "../persistence/index.js"
+import {productsService} from "../persistence/index.js";
 
 
 const router = Router();
 
 //http://localhost:8080/api/products 
+
 router.get("/", (req,res)=>{
     res.json({message:"listado de productos"})
 });
