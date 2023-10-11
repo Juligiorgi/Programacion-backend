@@ -9,11 +9,13 @@ import { productsService } from "./persistence/index.js";
 import { productsRouter } from "./routes/products.routes.js";
 import { cartsRouter } from "./routes/carts.routes.js";
 import { viewsRouter } from "./routes/views.routes.js";
-import { Socket } from "dgram";
+import { connectDB } from "./config/dbConnection.js";
+
 
 
 const port = 8080;
 const app = express();
+
 
 
 app.use(express.static(path.join(__dirname,"/public")));
@@ -21,6 +23,8 @@ app.use(express.static(path.join(__dirname,"/public")));
 const httpServer = app.listen(port,()=>console.log(`Servidor ejecutandose en el puerto ${port}`));
 
 const io = new Server(httpServer);
+
+await connectDB();
 
 app.use(viewsRouter);
 app.use("/api/products", productsRouter);
@@ -42,6 +46,12 @@ io.on("connection", async (socket)=>{
      const result = await productsService.createProduct(productsData)
      const products = await productsService.getProducts();
      io.emit("productsArray", products);
+    });
+
+    socket.on("deleteProduct", async (deleteId) =>{
+        const newProducts = await productsService.deleteProduct(deleteId);
+        const products = await productsService.getProducts(newProducts);
+        io.emit ("productsArray" , products);
     });
 });
 

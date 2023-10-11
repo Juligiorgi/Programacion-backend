@@ -6,29 +6,61 @@ const router = Router();
 
 //http://localhost:8080/api/products 
 
-router.get("/", (req,res)=>{
-    res.json({message:"listado de productos"})
+router.get("/",async  (req, res) => {
+    try{
+       let limit = parseInt(req.query.limit);
+       let allProducts = await productsService.getProducts();
+       if(!limit) 
+       return res.json(allProducts);
+       else{
+       let products = allProducts.slice(0, limit)
+       res.json(products);
+       }
+    }catch(error){
+        res.status(400).json({error:true,mensaje:error});
+    }
 });
 
-router.post("/", async(req,res) =>{
-    try{
-        const productInfo = req.body;
-    }catch(error){
-        res.json({status:"error", message:error.message});
+router.post("/", async (req,res)=>{
+
+   try{
+    const productInfo= req.body;
+    const products= await productsService.createProduct(productInfo);
+    res.json ({mensaje:"producto agregado",data: products});
+    }catch (error){
+     res.json({status:"error",mensaje:error.mensaje});
+    }
+ });
+ 
+
+router.get("/:pid",async(req,res)=>{
+    try {
+        const productId = parseInt(req.params.pid);
+        const product = await productsService.getProductsById(productId);
+        res.json(product);
+    } catch (error) {
+        res.json({status:"error",mensaje:error.mensaje});
+    }
+});
+
+router.put("/:pid", async(req,res)=>{
+    try {
+        const productId = parseInt(req.params.pid);
+       await productsService.updateProduct(productId);
+      res.json({"Producto Actualizado": putProduct});
+    } catch (error) {
+        res.json(error.mensaje);
     }
 })
 
- 
-router.get("/:pid",async (req,res) =>{
-    try{
+router.delete("/:pid", async(req,res)=>{
+    try {
         const productId = parseInt(req.params.pid);
-        const product = await productsService.getProductById(productId);
-        res.json({message:"finalizar para obtener un producto", data:product});
-    }catch (error){
-        res.json({status:"error", message:error.message})
+        await productsService.deleteProduct(productId);
+    } catch (error) {
+        res.send(error.mensaje);
     }
-    
-});
+})
 
 
-export {router as productsRouter};
+export { router as productsRouter};
