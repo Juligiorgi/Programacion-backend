@@ -25,8 +25,8 @@ router.post("/", async (req,res)=>{
 
    try{
     const productInfo= req.body;
-    const products= await productsService.createProduct(productInfo);
-    res.json ({mensaje:"producto agregado",data: products});
+    const result = await productsService.createProduct(productInfo);
+    res.json ({status:"producto agregado",result});
     }catch (error){
      res.json({status:"error",mensaje:error.mensaje});
     }

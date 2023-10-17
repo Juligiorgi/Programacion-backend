@@ -24,7 +24,7 @@ const productSchema = new mongoose.Schema({
     category:{
         type:String,
         required:true,
-        enum:["Goya","Tendencia","Finura"]
+        enum:["Libertad","Tendencia","Energia"]
     },
     stock:{
         type:Number,

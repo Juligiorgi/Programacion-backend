@@ -19,6 +19,8 @@ const app = express();
 
 
 app.use(express.static(path.join(__dirname,"/public")));
+app.use(express.json());
+app.use(express.urlencoded({extended:true}));
 
 const httpServer = app.listen(port,()=>console.log(`Servidor ejecutandose en el puerto ${port}`));
 
