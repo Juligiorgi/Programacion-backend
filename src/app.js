@@ -1,4 +1,6 @@
 import express from "express";
+import session from "express-session";
+import MongoStore from "connect-mongo";
 import { __dirname } from "./utils.js";
 import path from "path";
 import { engine } from "express-handlebars";
@@ -9,6 +11,7 @@ import { productsService } from "./persistence/index.js";
 import { productsRouter } from "./routes/products.routes.js";
 import { cartsRouter } from "./routes/carts.routes.js";
 import { viewsRouter } from "./routes/views.routes.js";
+import { sessionsRouter } from "./routes/sessions.routes.js";
 import { connectDB } from "./config/dbConnection.js";
 
 
@@ -28,7 +31,7 @@ const io = new Server(httpServer);
 
 await connectDB();
 
-app.use(viewsRouter);
+
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 
@@ -56,6 +59,22 @@ io.on("connection", async (socket)=>{
         io.emit ("productsArray" , products);
     });
 });
+
+
+app.use(session({
+    store:MongoStore.create({
+        ttl:3000,
+        mongoUrl:"mongodb+srv://juligiorgi2536:juligiorgi123@codercluser.mab28uy.mongodb.net/primerLogin?retryWrites=true&w=majority&appName=AtlasApp"
+    }),
+    secret:"secretSessionCoder",
+    resave:true,
+    saveUninitialized:true
+}));
+
+app.use(viewsRouter);
+app.use("/api/sessions", sessionsRouter);
+
+
 
 
 

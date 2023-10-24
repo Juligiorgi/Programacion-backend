@@ -15,11 +15,12 @@ const cartSchema = new mongoose.Schema({
           quantity:{
             type:Number,
             required:true
-          }
-        }
+          },
+          _id: false
+        },
       ],
       default:[]
-    } 
+    },
 });
 
 export const cartModel = mongoose.model(cartsCollection, cartSchema);

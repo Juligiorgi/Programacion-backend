@@ -1,16 +1,31 @@
 import { Router } from "express";
-import {productsService} from "../persistence/index.js";
 
 const router = Router();
 
-router.get("/", async (req,res)=>{
-  const products = await productsService.getProducts();
-  console.log("products", products);
-  res.render("home",{products: products});
+router.get("/",(req,res)=>{
+  res.render("Home");
 });
 
 router.get("/realtimeproducts",(req,res)=>{
     res.render("realTime");
-  });
+});
 
-export {router as viewsRouter}
+router.get("/Login",(req,res)=>{
+  res.render("loginView");
+});
+
+router.get("/Profile",(req,res)=>{
+  if(req.session.email){
+    const userEmail = req.session.email;
+    res.render("Profile", {userEmail});
+  }else{
+    res.redirect("/login");
+  }
+
+});
+
+router.get("/singupView",(req,res)=>{
+  res.render("singupView");
+});
+
+export {router as viewsRouter};
