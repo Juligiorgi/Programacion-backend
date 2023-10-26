@@ -1,20 +1,22 @@
 import { Router } from "express";
-import { usersModel } from "../persistence/mongo/Models/users.model.js";
+import passport from "passport";
+import { config } from "../config/config.js";
 
 const router = Router();
 
 //sign up
-router.post("/signup", async (req, res) => {
-  try {
-    const signupForm = req.body;
-    const result = await usersModel.create(signupForm);
-    if (result) {
-      res.render("loginView", { message: "Usuario registrado correctamente" });
-    }
-  } catch (error) {
-    res.render("signupView", { error: "No se pudo registrar" });
-  }
+router.post("/signup",passport.authenticate("sigupLocalStartegy",{
+  failureRedirect:"/api/sessions/fail-signup"
+}), async (req, res) => {
+    res.render("loginView", { message: "Usuario registrado correctamente" });
+    
 });
+
+router.get("/fail-signup",(req,res)=>{
+  res.render("signupView", { error: "No se pudo registrar" });
+});
+
+
 //login
 router.post("/login", async (req, res) => {
   try {
@@ -24,7 +26,7 @@ router.post("/login", async (req, res) => {
       return res.render("loginView",{error:"Este usuario no esta registrado"});
     }
     //contraseña
-    if(user.password !== loginForm.password){
+    if(!inValidPassword(loginForm.password,user)){
       return res.render("loginView", {error:"Credenciales incorrectas"});
     }
     //usuario existente
@@ -46,6 +48,14 @@ router.post("/logout", async (req, res) => {
   }
 });
 
+//Registrarse con github
+router.get("/signup-github", passport.authenticate("signupGithubStrategy"));
+
+router.get(config.github.callbackUrl, passport.authenticate("singupGithubStrategy",{
+  failureRedirect:"/api/sessions/fail-singup"
+}),(req,res) =>{
+    res.redirect("/profile");
+});
 
 
 export { router as sessionsRouter };
