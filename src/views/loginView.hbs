@@ -1,12 +1,15 @@
 <h1>Pagina Login</h1>
 
 <p>{{message}}</p>
-<p>{{error}}</p>
+<p id="errorMsg">{{error}}</p>
 
-<form method="post" action="/api/sessions/login">
+<form id= "loginForm" method="post" action="/api/sessions/login">
   <input type="email" name="email" placeholder="Tu correo">
   <br/><br/>
   <input type="password" name="password" placeholder="Tu contraseña">
   <br/><br/>
   <button>Iniciar Sesion </button>
 </form>
+
+
+<script src="/js/signup.js"></script>

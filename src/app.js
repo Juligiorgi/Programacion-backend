@@ -1,6 +1,4 @@
 import express from "express";
-import session from "express-session";
-import MongoStore from "connect-mongo";
 import { __dirname } from "./utils.js";
 import path from "path";
 import { engine } from "express-handlebars";
@@ -23,12 +21,13 @@ import { config } from "./config/config.js";
 
 const port = 8080;
 const app = express();
+
+
+
 app.use(express.json());
-
-
-
 app.use(express.static(path.join(__dirname,"/public")));
 app.use(express.urlencoded({extended:true}));
+app.use(cookieParser());
 
 const httpServer = app.listen(PORT,()=>console.log(`Servidor ejecutandose en el puerto ${PORT}`));
 
@@ -73,21 +72,11 @@ io.on("connection", async (socket)=>{
     });
 });
 
-//config sesion 
-app.use(session({
-    store:MongoStore.create({
-        ttl:3000,
-        mongoUrl:config.mongo.url
-    }),
-    secret:config.server.secretSession,
-    resave:true,
-    saveUninitialized:true
-}));
+
 
 //config passport
 initPassport();
 app.use(passport.initialize());
-app.use(passport.session());
 
 
 

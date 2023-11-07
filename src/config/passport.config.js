@@ -1,11 +1,15 @@
 import passport from "passport";
 import localStrategy from "passport-local";
-import { createHash, inValidPassword } from "../utils.js";
+import {createHash, inValidPassword } from "../utils.js";
 import { usersModel } from "../persistence/mongo/Models/users.model.js";
 import GithubStrategy from "passport-github2";
 import { config } from "./config.js";
+import { PRIVATE_KEY } from "../utils.js";
+import jwt from "passport-jwt";
 
 
+const JWTStrategy = jwt.Strategy;
+const extractJwt = jwt.ExtractJwt;
 
 export const initPassport = () =>{
     passport.use("sigupLocalStartegy", new localStrategy(
@@ -22,6 +26,8 @@ export const initPassport = () =>{
                 }
                 const newUser ={
                     first_name,
+                    last_name,
+                    age,
                     email:username,
                     password:createHash(password)
                 };
@@ -81,12 +87,36 @@ export const initPassport = () =>{
         }
     ))
 
-    passport.serializeUser((user,done)=>{
-        done(null, user._id);
-    });
 
-    passport.deserializeUser(async(id,done)=>{
-        const user = await usersModel.findById(id);
-        done(null,user);//req.user = informacion del usuario que traemos de la base de datos
-    });
+
+
+    passport.use("jwtAuth", new JWTStrategy(
+        {
+            jwtFromRequest: extractJwt.fromExtractors([cookieExtractor]),
+            secretOrKey: PRIVATE_KEY
+        },
+        async (jwtPayload,done)=>{
+            try {
+                return done (null,jwtPayload);
+            } catch (error) {
+                return done (error);
+            }
+        }
+    ));
+
+
+    const cookieExtractor =(req) =>{
+        let token;
+        console.log("req",req);
+        if(req && req.cookies){
+            token =req.cookies["cookieToken"];
+        }else{
+            token =null;
+        }
+        return token;
+    }
+
 };
+
+
+
