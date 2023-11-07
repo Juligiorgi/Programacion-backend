@@ -1,9 +1,43 @@
-<h1>Pagina del home</h1>
+<div>
+    <h1>Pagina del home</h1>
+    <h1>!Hola! {{name}}</h1>
+    
 
 
-{{#each products}}
-  <div>Nombre del producto: {{this.title}}</div>
+{{#each docs}}
+  <h3>Nombre del producto: {{this.title}}</h3>
 {{/each}}
+{{#each payload}}
+    
+      <div>
+        <h3>Nombre producto:{{this.title}}</h3>
+        <p> Descripcion {{this.description}}</p>
+        <p>$ {{this.price}}</p>
+        <p>stock: {{this.stock}}</p>
+
+        <button onclick=" addToCart (`{{this._id}}`)">
+          Agregar al carrito
+        </button>
+      </div>
+  
+  {{/each}}
+  
+  
+  <div >
+    {{#if prevLink}}
+
+      <a href="{{prevLink}}"> Anterior</a>
+
+    {{/if}}
+    {{#if nextLink}}
+
+      <a href="{{nextLink}}"> Siguiente</a>
+
+    {{/if}}
+  </div>
+  <script src="/js/index.js"></script>
+</div>
+
 
 
 

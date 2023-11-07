@@ -1,6 +1,6 @@
 import passport from "passport";
 import localStrategy from "passport-local";
-import { createHash, inValidPassword } from "../utils";
+import { createHash, inValidPassword } from "../utils.js";
 import { usersModel } from "../persistence/mongo/Models/users.model.js";
 import GithubStrategy from "passport-github2";
 import { config } from "./config.js";
@@ -48,7 +48,7 @@ export const initPassport = () =>{
                 if(!inValidPassword(password,user)){
                     return done(null,false);
                 }
-                //validamos que el usuario esta registrado y que la contrase;a es correcta
+                //validamos que el usuario esta registrado y que la contraseña es correcta
                 return done(null,user);
             } catch (error) {
                 return done(error);

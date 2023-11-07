@@ -8,6 +8,7 @@ import { Server } from "socket.io";
 import { productsService } from "./persistence/index.js";
 import { initPassport } from "./config/passport.config.js";
 import passport from "passport";
+import cookieParser from "cookie-parser";
 
 //routers
 import { productsRouter } from "./routes/products.routes.js";
@@ -22,22 +23,30 @@ import { config } from "./config/config.js";
 
 const port = 8080;
 const app = express();
+app.use(express.json());
 
 
 
 app.use(express.static(path.join(__dirname,"/public")));
-app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
-const httpServer = app.listen(port,()=>console.log(`Servidor ejecutandose en el puerto ${port}`));
+const httpServer = app.listen(PORT,()=>console.log(`Servidor ejecutandose en el puerto ${PORT}`));
 
 const io = new Server(httpServer);
 
 await connectDB();
 
+app.use(viewsRouter);
+
+app.use(cookieParser("claveCookies"));
 
 app.use("/api/products", productsRouter);
+
 app.use("/api/carts", cartsRouter);
+
+app.use(express.static(path.join(__dirname,"/public")));
+
+app.use(express.urlencoded({extended:true}));
 
 
 //configuracion 
@@ -81,7 +90,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
-app.use(viewsRouter);
+
 app.use("/api/sessions", sessionsRouter);
 
 

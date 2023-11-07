@@ -26,6 +26,16 @@ export class ProductsManagerMongo{
 
     };
 
+    async getProductsPaginate(query, options){
+        try {
+            const result = await this.model.paginate(query,options);
+            return result;
+        } catch (error) {
+            console.log(`get products error: ${error.message}`);
+            throw new Error ("Se produjo un error al crear el producto")
+        }
+    };
+
    async getProductsById(productId){
         try {
             // const result = await this.model.findOne({_id:productId});

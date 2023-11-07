@@ -1,13 +1,6 @@
 <h1>cart</h1>
 <div>
   {{#each products}}
-    <div class="div" id="product-{{this.productId._id}}">
-      <div class="img">
-        <img
-          src="{{{this.productId.thumbnail}}}"
-          alt="{{this.productId.title}}"
-        />
-      </div>
       <div class="product">
         <h2>{{this.productId.title}}</h2>
         <h3>{{this.productId.description}}</h3>

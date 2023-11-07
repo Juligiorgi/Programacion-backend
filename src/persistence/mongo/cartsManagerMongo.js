@@ -7,7 +7,14 @@ export class CartsManagerMongo{
         this.model=cartModel;
     };
 
-    async getCarts(){};
+    async getCarts(){
+        try {
+            const cart = await this.model.find().lean();
+            return cart;
+        } catch (error) {
+            throw new Error ("no se pudo entrar el carrito de compra")
+        }
+    };
 
     async getCartById(cartId){
         try {
@@ -83,4 +90,20 @@ export class CartsManagerMongo{
           throw new Error ("No se puedo actualizar el producto del carrito"); 
         }
     };
+
+    async deleteCart(id){
+        try {
+            const result = await this.model.findByIdAndDelete(id);
+            if(!result){
+                throw new Error ("cart not found");
+            }else{
+                return result;
+            }
+        } catch (error) {
+            console.log(`delete cart error: ${error.message}`);
+            throw new Error(`delete cart error: ${error.message}`);
+        }
+    }
+
+
 };
