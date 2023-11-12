@@ -105,18 +105,18 @@ export const initPassport = () =>{
     ));
 
 
-    const cookieExtractor =(req) =>{
-        let token;
-        console.log("req",req);
-        if(req && req.cookies){
-            token =req.cookies["cookieToken"];
-        }else{
-            token =null;
-        }
-        return token;
-    }
-
 };
+
+const cookieExtractor =(req) =>{
+    let token;
+    console.log("req",req);
+    if(req && req.cookies){
+        token =req.cookies["cookieToken"];
+    }else{
+        token =null;
+    }
+    return token;
+}
 
 
 

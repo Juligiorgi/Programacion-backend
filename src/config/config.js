@@ -11,6 +11,6 @@ export const config = {
         url:process.env.MONGO_URL
     },
     github:{
-        
+        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
     }
 }

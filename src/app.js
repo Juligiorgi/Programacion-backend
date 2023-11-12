@@ -29,7 +29,7 @@ app.use(express.static(path.join(__dirname,"/public")));
 app.use(express.urlencoded({extended:true}));
 app.use(cookieParser());
 
-const httpServer = app.listen(PORT,()=>console.log(`Servidor ejecutandose en el puerto ${PORT}`));
+const httpServer = app.listen(port,()=>console.log(`Servidor ejecutandose en el puerto ${port}`));
 
 const io = new Server(httpServer);
 

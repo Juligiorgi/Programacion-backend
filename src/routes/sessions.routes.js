@@ -53,7 +53,7 @@ router.post("/logout", async (req, res) => {
 });
 
 //Registrarse con github
-router.get("/signup-github", passport.authenticate("signupGithubStrategy"));
+router.get("/signup-github", passport.authenticate("sigupLocalStartegy"));
 
 router.get(config.github.callbackUrl, passport.authenticate("singupGithubStrategy",{
   failureRedirect:"/api/sessions/fail-singup"
