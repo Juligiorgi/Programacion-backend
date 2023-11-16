@@ -8,9 +8,14 @@ export const config = {
         secretSession: process.env.SECRET_SESSION
     },
     mongo:{
-        url:process.env.MONGO_URL
+        url:'mongodb+srv:juligiorgi2536:juligiorgi123@codercluser.mab28uy.mongodb.net/primerLogin?retryWrites=true&w=majority&appName=AtlasApp'
     },
     github:{
-        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
+        callbackUrl: process.env.GITHUB_CALLBACK_URL,
+        clientId: process.env.GITHUB_CLIENT_ID,
+        clientSecret: process.env.GITHUB_CLIENT_SECRET,
+    },
+    token:{
+    privateKey: process.env.PRIVATE_KEY,
     }
 }

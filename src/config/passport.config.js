@@ -1,10 +1,9 @@
 import passport from "passport";
 import localStrategy from "passport-local";
 import {createHash, inValidPassword } from "../utils.js";
-import { usersModel } from "../persistence/mongo/Models/users.model.js";
+import { usersModel } from "../dao/mongo/Models/users.model.js";
 import GithubStrategy from "passport-github2";
 import { config } from "./config.js";
-import { PRIVATE_KEY } from "../utils.js";
 import jwt from "passport-jwt";
 
 
@@ -12,26 +11,26 @@ const JWTStrategy = jwt.Strategy;
 const extractJwt = jwt.ExtractJwt;
 
 export const initPassport = () =>{
-    passport.use("sigupLocalStartegy", new localStrategy(
+    passport.use("sigupLocalStrategy", new localStrategy(
         {
          passReqToCallback: true,
          usernameField:"email",
         },
         async(req,username,password,done) =>{
-            const {first_name} = req.body;
+            const {name, lastname,age} = req.body;
             try {
-                const user = await usersModel.findOne({email:username});
+                const user = await usersModel.getUserByEmail(username);
                 if(user){
                     return done(null,false);
                 }
                 const newUser ={
-                    first_name,
-                    last_name,
+                    name,
+                    lastname,
                     age,
                     email:username,
                     password:createHash(password)
                 };
-                const userCreated = await usersModel.create(newUser);
+                const userCreated = await usersModel.addUser(newUser);
                 return done (null, userCreated);
             } catch (error) {
                 return done(error);
@@ -46,7 +45,7 @@ export const initPassport = () =>{
         },
         async (username,password,done)=>{
             try {
-                const user = await usersModel.findOne({email:username});
+                const user = await usersModel.getUserByEmail(username);
                 if(!user){
                     //el usuario no esta registrado
                     return done(null,false);
@@ -64,22 +63,22 @@ export const initPassport = () =>{
 
     passport.use("signupGithubStrategy", new GithubStrategy(
         {
-            clientID: config.github.clientID,
+            clientID: config.github.clientId,
             clientSecret: config.github.clientSecret,
-            callbackURL: `http://localhost:8080${config.github.callbackURL}`
+            callbackURL: `http://localhost:8080/api/sessions${config.github.callbackUrl}`,
         },
-        async(access,refreshToken,profile,done) =>{
+        async(accessToken,refreshToken,profile,done) =>{
             try {
-                const user = await usersModel.findOne({email:profile.username});
+                const user = await usersModel.getUserByEmail(profile._json.email);
                 if(user){
                     return done(null,user);
                 }
                 const newUser ={
-                    first_name,
-                    email:profile.username,
-                    password:createHash(profile.id)
+                    name: profile._json.name,
+                    email:profile._json.email,
+                    password:createHash(profile.id),
                 };
-                const userCreated = await usersModel.create(newUser);
+                const userCreated = await usersModel.addUser(newUser);
                 return done (null, userCreated);
             } catch (error) {
                 return done(error);
@@ -87,13 +86,33 @@ export const initPassport = () =>{
         }
     ))
 
+    passport.use("loginGithubStrategy",new GithubStrategy(
+        {
+            clientID: config.github.clientId,
+            clientSecret: config.github.clientSecret,
+            callbackURL: `http://localhost:8080/api/sessions${config.github.callbackUrl}`,
+        },
+          async (profile, done) => {
+            try {
+              const user = await usersModel.getUserByEmail(profile._json.email);
+              if (!user) {
+                return done(null, false);
+              }
+              return done(null, user);
+            } catch (error) {
+              return done(error);
+            }
+          }
+        )
+      );
+
 
 
 
     passport.use("jwtAuth", new JWTStrategy(
         {
             jwtFromRequest: extractJwt.fromExtractors([cookieExtractor]),
-            secretOrKey: PRIVATE_KEY
+            secretOrKey: config.token.privateKey,
         },
         async (jwtPayload,done)=>{
             try {
@@ -109,7 +128,6 @@ export const initPassport = () =>{
 
 const cookieExtractor =(req) =>{
     let token;
-    console.log("req",req);
     if(req && req.cookies){
         token =req.cookies["cookieToken"];
     }else{

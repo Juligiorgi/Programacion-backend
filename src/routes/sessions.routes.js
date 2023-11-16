@@ -3,10 +3,11 @@ import passport from "passport";
 import { config } from "../config/config.js";
 import { generateToken } from "../utils.js";
 
+
 const router = Router();
 
 //sign up
-router.post("/signup",passport.authenticate("sigupLocalStartegy",{
+router.post("/signup",passport.authenticate("sigupLocalStrategy",{
   session:false,
   failureRedirect:"/api/sessions/fail-signup"
 }), async (req, res) => {
@@ -23,18 +24,26 @@ router.get("/fail-signup",(req,res)=>{
 router.post("/login", passport.authenticate ("loginLocalStrategy",{
   session:false,
   failureRedirect:"/api/sessions/fail-login"
-}), (req,res) =>{
+}), async (req,res) =>{
     const token = generateToken(req.user);
     res.cookie("cookiesToken",token).json({status:"success", message:"login exitoso"});
-    //res.redirect("/profile")
+    
+});
+router.get("/fail-login",(req,res) =>{
+  res.render("login",{
+    error: "login error",
+  });
 });
 
-router.post("/profile", passport,authenticate("jwtAuth",{
+router.post("/profile", passport.authenticate("jwtAuth",{
   session:false,
   failureRedirect:"/api/sessions/fail-auth"
-}) ,(req,res)=>{
- 
+}), async (req,res) =>{
+ try {
   res.json({status:"success",message:"peticion recibida", data:req.user});
+ } catch (error) {
+  console.log(error);
+ }
 });
 
 router.get("/fail-auth",(req,res)=>{
@@ -52,13 +61,36 @@ router.post("/logout", async (req, res) => {
   }
 });
 
+router.get("/logout", async (req,res) =>{
+  try {
+    res.clearCookie("cookieToken");
+    res.redirect("/");
+  } catch (error) {
+    res.render("profile",{error:"logout error"});
+  }
+});
+
 //Registrarse con github
-router.get("/signup-github", passport.authenticate("sigupLocalStartegy"));
+
+router.get("/login-github", passport.authenticate("loginGithubStrategy"));
+
+router.get(config.github.callbackUrl,passport.authenticate("loginGithubStrategy", {
+  session:false,
+  failureRedirect: "/api/sessions/fail-login",
+  }),(req, res) => {
+    const token = generateToken(req.user);
+    res.cookie("cookieToken", token).redirect("/profile", 200, {});
+  }
+);
+
+router.get("/signup-github", passport.authenticate("singupGithubStrategy"));
 
 router.get(config.github.callbackUrl, passport.authenticate("singupGithubStrategy",{
-  failureRedirect:"/api/sessions/fail-singup"
+  session:false,
+  failureRedirect:"/api/sessions/fail-singup",
 }),(req,res) =>{
-    res.redirect("/profile");
+  const token = generateToken(req.user);
+  res.cookie("cookieToken", token).render("/profile",200,{});
 });
 
 
