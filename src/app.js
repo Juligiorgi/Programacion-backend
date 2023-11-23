@@ -1,12 +1,15 @@
 import express from "express";
+import session from "express-session";
 import { __dirname } from "./utils.js";
 import path from "path";
 import { engine } from "express-handlebars";
 import { Server } from "socket.io";
 import { chatService, productsService } from "./dao/index.js";
-import { initPassport } from "./config/passport.config.js";
+import { initializePassport } from "./config/passport.config.js";
 import passport from "passport";
 import cookieParser from "cookie-parser";
+import MongoStore from "connect-mongo";
+import { config } from "./config/config.js";
 
 //routers
 import { productsRouter } from "./routes/products.routes.js";
@@ -15,6 +18,7 @@ import { viewsRouter } from "./routes/views.routes.js";
 import { sessionsRouter } from "./routes/sessions.routes.js";
 import { connectDB } from "./config/dbConnection.js";
 import { clothesRouter } from "./routes/clothes.routes.js";
+
 
 
 
@@ -63,7 +67,7 @@ app.use(session({
 
 
 //config passport
-initPassport();
+initializePassport();
 app.use(passport.initialize());
 
 

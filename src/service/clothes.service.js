@@ -1,4 +1,4 @@
-import { clothesDao } from "../persistence/index.js";
+import { clothesDao } from "../dao/index.js";
 
 
 export class ClothesService{

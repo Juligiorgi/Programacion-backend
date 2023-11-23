@@ -1,6 +1,5 @@
 import { Router } from "express";
 import passport from "passport";
-import { config } from "../config/config.js";
 import { generateToken } from "../utils.js";
 
 
@@ -68,29 +67,6 @@ router.get("/logout", async (req,res) =>{
   } catch (error) {
     res.render("profile",{error:"logout error"});
   }
-});
-
-//Registrarse con github
-
-router.get("/login-github", passport.authenticate("loginGithubStrategy"));
-
-router.get(config.github.callbackUrl,passport.authenticate("loginGithubStrategy", {
-  session:false,
-  failureRedirect: "/api/sessions/fail-login",
-  }),(req, res) => {
-    const token = generateToken(req.user);
-    res.cookie("cookieToken", token).redirect("/profile", 200, {});
-  }
-);
-
-router.get("/signup-github", passport.authenticate("singupGithubStrategy"));
-
-router.get(config.github.callbackUrl, passport.authenticate("singupGithubStrategy",{
-  session:false,
-  failureRedirect:"/api/sessions/fail-singup",
-}),(req,res) =>{
-  const token = generateToken(req.user);
-  res.cookie("cookieToken", token).render("/profile",200,{});
 });
 
 

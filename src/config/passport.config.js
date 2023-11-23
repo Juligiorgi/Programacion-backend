@@ -2,15 +2,15 @@ import passport from "passport";
 import localStrategy from "passport-local";
 import {createHash, inValidPassword } from "../utils.js";
 import { usersModel } from "../dao/mongo/Models/users.model.js";
-import GithubStrategy from "passport-github2";
 import { config } from "./config.js";
 import jwt from "passport-jwt";
+
 
 
 const JWTStrategy = jwt.Strategy;
 const extractJwt = jwt.ExtractJwt;
 
-export const initPassport = () =>{
+export const initializePassport = () =>{
     passport.use("sigupLocalStrategy", new localStrategy(
         {
          passReqToCallback: true,
@@ -60,54 +60,6 @@ export const initPassport = () =>{
             }
         }
     ));
-
-    passport.use("signupGithubStrategy", new GithubStrategy(
-        {
-            clientID: config.github.clientId,
-            clientSecret: config.github.clientSecret,
-            callbackURL: `http://localhost:8080/api/sessions${config.github.callbackUrl}`,
-        },
-        async(accessToken,refreshToken,profile,done) =>{
-            try {
-                const user = await usersModel.getUserByEmail(profile._json.email);
-                if(user){
-                    return done(null,user);
-                }
-                const newUser ={
-                    name: profile._json.name,
-                    email:profile._json.email,
-                    password:createHash(profile.id),
-                };
-                const userCreated = await usersModel.addUser(newUser);
-                return done (null, userCreated);
-            } catch (error) {
-                return done(error);
-            }
-        }
-    ))
-
-    passport.use("loginGithubStrategy",new GithubStrategy(
-        {
-            clientID: config.github.clientId,
-            clientSecret: config.github.clientSecret,
-            callbackURL: `http://localhost:8080/api/sessions${config.github.callbackUrl}`,
-        },
-          async (profile, done) => {
-            try {
-              const user = await usersModel.getUserByEmail(profile._json.email);
-              if (!user) {
-                return done(null, false);
-              }
-              return done(null, user);
-            } catch (error) {
-              return done(error);
-            }
-          }
-        )
-      );
-
-
-
 
     passport.use("jwtAuth", new JWTStrategy(
         {
