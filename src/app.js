@@ -17,7 +17,7 @@ import { cartsRouter } from "./routes/carts.routes.js";
 import { viewsRouter } from "./routes/views.routes.js";
 import { sessionsRouter } from "./routes/sessions.routes.js";
 import { connectDB } from "./config/dbConnection.js";
-import { clothesRouter } from "./routes/clothes.routes.js";
+
 
 
 
@@ -48,7 +48,6 @@ app.use("/api/carts", cartsRouter);
 
 app.use("/api/sessions", sessionsRouter);
 
-app.use("/api/clothes", clothesRouter);
 
 app.use(express.static(path.join(__dirname,"/public")));
 
@@ -57,7 +56,7 @@ app.use(express.urlencoded({extended:true}));
 app.use(session({
   store: MongoStore.create({
       ttl:3000,
-      mongoUrl: 'mongodb+srv:juligiorgi2536:juligiorgi123@codercluser.mab28uy.mongodb.net/primerLogin?retryWrites=true&w=majority&appName=AtlasApp'
+      mongoUrl:config.mongo.url,
   }),
   secret:config.server.secretSession,
   resave:true,
@@ -67,6 +66,7 @@ app.use(session({
 
 
 //config passport
+
 initializePassport();
 app.use(passport.initialize());
 
