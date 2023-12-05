@@ -10,6 +10,8 @@ import passport from "passport";
 import cookieParser from "cookie-parser";
 import MongoStore from "connect-mongo";
 import { config } from "./config/config.js";
+import { errorHandler } from "./middleware/errorHandler.js";
+
 
 //routers
 import { productsRouter } from "./routes/products.routes.js";
@@ -17,6 +19,7 @@ import { cartsRouter } from "./routes/carts.routes.js";
 import { viewsRouter } from "./routes/views.routes.js";
 import { sessionsRouter } from "./routes/sessions.routes.js";
 import { connectDB } from "./config/dbConnection.js";
+import {usersRoutes} from "./routes/users.routes.js";
 
 
 
@@ -47,6 +50,10 @@ app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 
 app.use("/api/sessions", sessionsRouter);
+
+app.use("/api/users", usersRoutes);
+
+app.use(errorHandler);
 
 
 app.use(express.static(path.join(__dirname,"/public")));
