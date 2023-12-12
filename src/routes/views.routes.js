@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { logger } from "../helpers/logger.js";
 
 const router = Router();
 
@@ -26,6 +27,13 @@ router.get("/Profile",(req,res)=>{
 
 router.get("/singupView",(req,res)=>{
   res.render("singupView");
+});
+
+router.get("/testLogger", (req,res) =>{
+  logger.error("log error");
+  logger.warning("log warning");
+  logger.debbug("log debbug");
+  res.send("prueba logger");
 });
 
 export {router as viewsRouter};

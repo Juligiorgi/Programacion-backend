@@ -11,7 +11,7 @@ import cookieParser from "cookie-parser";
 import MongoStore from "connect-mongo";
 import { config } from "./config/config.js";
 import { errorHandler } from "./middleware/errorHandler.js";
-
+import { logger } from "./helpers/logger.js";
 
 //routers
 import { productsRouter } from "./routes/products.routes.js";
@@ -20,9 +20,6 @@ import { viewsRouter } from "./routes/views.routes.js";
 import { sessionsRouter } from "./routes/sessions.routes.js";
 import { connectDB } from "./config/dbConnection.js";
 import {usersRoutes} from "./routes/users.routes.js";
-
-
-
 
 
 
@@ -35,7 +32,7 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname,"/public")));
 app.use(express.urlencoded({extended:true}));
 
-const httpServer = app.listen(port,()=>console.log(`Servidor ejecutandose en el puerto ${port}`));
+const httpServer = app.listen(port,()=>logger.info(`Servidor ejecutandose en el puerto ${port}`));
 
 
 
@@ -70,6 +67,15 @@ app.use(session({
   saveUninitialized:true
 }));
 
+//logger
+
+app.get("/", (req,res)=>{
+  logger.debug("Este es un mensaje de debug");
+  logger.http("Este es un mensaje http");
+  logger.warn("Este es un mensaje de advertencia");
+  logger.error("Este es un mensaje de error");
+  res.send("Peticion recibida");
+});
 
 
 //config passport

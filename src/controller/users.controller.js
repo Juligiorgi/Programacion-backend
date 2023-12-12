@@ -1,6 +1,6 @@
-import { CustomError } from "../service/customError.service.js";
+import { CustomError } from "../service/error/customError.service.js";
 import { EEror} from "../enums/EEror.js";
-import { userCreateError } from "../service/userCreateError.service.js";
+import { userCreateError } from "../service/error/userCreateError.service.js";
 
 
 
