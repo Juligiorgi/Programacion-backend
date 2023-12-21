@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { generateUser } from "../helpers/mock.js";
 import { UsersController } from "../controller/users.controller.js";
-
+import { checkRole } from "../middleware/auth.js";
 
 
 const router = Router();
@@ -18,5 +18,7 @@ router.get("/",(req,res) =>{
     };
     res.json({status:"success", data:users});
 });
+
+router.put("/premium/:uid", checkRole(["admin"]), UsersController.modifyRole );
 
 export {router as usersRoutes};

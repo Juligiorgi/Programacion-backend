@@ -14,5 +14,10 @@ export const config = {
     token:{
         privateKey: process.env.PRIVATE_KEY,
       },
+    gmail:{
+        account: process.env.ADMIN_EMAIL,
+        password: process.env.ADMIN_PASS,
+        secretToken:process.env.TOKEN_EMAIL
+    }
 
 }

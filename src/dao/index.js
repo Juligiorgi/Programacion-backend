@@ -11,7 +11,7 @@ import { ClothesMemory } from "./memory/clothes.memory.js";
 export const productsService = new ProductsManagerMongo();
 export const cartsService = new CartsManagerMongo();
 export const chatService = new chatManagerMongo();
-export const usersService = new UsersManagerMongo();
+export const usersDao = new UsersManagerMongo();
 export const clothesDao = new ClothesMemory();
 
 

@@ -34,4 +34,14 @@ export class UsersManagerMongo {
       throw new Error(`get user error: ${error.message}`);
     }
   }
+
+  async updateUser(id,user){
+    try {
+      const result = await this.model.findByIdAndUpdate(id,user,{new:true});
+      return result;
+    } catch (error) {
+      console.log("updateUser: ", error.message);
+      throw new Error("Se produjo un error actualizando el usuario");
+    }
+  }
 }

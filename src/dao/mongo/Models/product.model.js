@@ -30,7 +30,10 @@ const productSchema = new mongoose.Schema({
         type:Number,
         required:true 
     },
-    
+    owner:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref:"users"
+    }
 });
 productSchema.plugin(mongoosePaginate);
 

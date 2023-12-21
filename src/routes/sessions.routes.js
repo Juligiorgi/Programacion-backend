@@ -16,4 +16,8 @@ router.post("/login", passport.authenticate("loginLocalStrategy",{
 
 router.get("/fail-login", SessionsController.failLogin);
 
+router.post("/forgot-password", SessionsController.forgotPassword);
+
+router.post("/reset-password", SessionsController.resetPassword);
+
 export {router as sessionsRouter};
