@@ -1,0 +1,65 @@
+paths:
+  /api/product/:
+    post:
+      summary: Endpoint para crear un producto
+      tags:
+        - Products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/createUpdateProduct"
+      responses:
+        "200":
+          description: Creacion del producto exitoso
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/SuccessCreateProduct"
+        "401":
+          description: Usuario no autorizado
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/ErrorAuthorization"
+        "500":
+          description: fallo del servidor
+
+components:
+  schemas:
+    SuccessCreateProduct:
+      type: object
+      properties:
+        status:
+          type: string
+        result:
+          type: object
+      example:
+        status: "success"
+        result:
+          title: "Top"
+  requestBodies:
+    createUpdateProduct:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        code:
+          type: string
+        category:
+          type: string
+        stock:
+          type: number
+      example:
+        title: "Remera"
+        description: "Escotada"
+        price: 3500
+        code: 563365
+        category: Ropa
+        stock: 10
+   

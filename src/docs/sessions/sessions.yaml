@@ -1,0 +1,53 @@
+paths:
+ /api/sessions/login:
+   post:
+     summary: Loguear el usuario
+     tags:
+       - Autenticacion 
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+             $ref: "#components/requestBodies/Login"
+        responses:
+         "200":
+           description: Logueo exitoso
+          "500":
+           description: El servidor ha fallado
+
+
+
+components:
+  schemas:
+    ErrorAuthorization:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+      example:
+        status: "error"
+        message: "Debes estar autenticado"
+  requestBodies:
+    Login:
+      type: object
+      properties:
+        email:
+          type: string
+          description: Correo del usuario
+        password:
+          type: string
+          description: Contraseña del usuario
+      example:
+        email: juli@gmail.com
+        password: flor123
+      
+      
+
+
+            
+
+      
+ 

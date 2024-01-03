@@ -12,6 +12,9 @@ import MongoStore from "connect-mongo";
 import { config } from "./config/config.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import { logger } from "./helpers/logger.js";
+import { swaggerSpecs } from "./config/swagger.config.js";
+import  SwaggerUI from "swagger-ui-express";
+
 
 //routers
 import { productsRouter } from "./routes/products.routes.js";
@@ -50,7 +53,10 @@ app.use("/api/sessions", sessionsRouter);
 
 app.use("/api/users", usersRoutes);
 
+app.use("/api/docs", SwaggerUI.serve, SwaggerUI.setup(swaggerSpecs));
+
 app.use(errorHandler);
+
 
 
 app.use(express.static(path.join(__dirname,"/public")));
