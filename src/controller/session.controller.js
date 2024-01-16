@@ -3,6 +3,7 @@ import { UsersService } from "../service/user.service.js";
 import { createHash, inValidPassword } from "../utils.js";
 
 
+
 export class SessionsController{
     static redirectLogin = (req,res)=>{
         res.redirect("/login");
