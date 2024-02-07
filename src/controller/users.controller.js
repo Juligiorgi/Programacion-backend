@@ -1,6 +1,7 @@
 import { CustomError } from "../service/error/customError.service.js";
 import { EEror} from "../enums/EEror.js";
 import { userCreateError } from "../service/error/userCreateError.service.js";
+import { UsersService } from "../service/user.service.js";
 
 
 
@@ -43,4 +44,33 @@ export class UsersController{
           res.json({status:"error", message:error.message});
       }
   };
-}
+  static uploadUserDocuments = async(req,res)=>{
+    try {
+      const userId =req.params.uid;
+      const user = await UsersService.getUserById(userId);
+      const identificacion = req.files['identificacion']?.[0] || null;
+      const domicilio = req.files['identificacion']?.[0] || null;
+      const estadDeCuenta = req.files['identificacion']?.[0] || null;
+      const docs = [];
+      if(identificacion){
+          docs.push({name:"identificacion", reference: identificacion.filename});
+      }
+      if(domicilio){
+          docs.push({name:"domicilio", reference: domicilio.filename});
+      }
+      if(estadoDeCuenta){
+          docs.push({name:"estadoDeCuenta", reference: estadoDeCuenta.filename});
+      }
+      user.documents = docs;
+      if(docs.length<3){
+          user.status = "incompleto";
+      } else {
+          user.status = "completo";
+      }
+      await UsersService.updateUser(user._id, user);
+      res.json({status:"success", message:"documentos actualizados"});
+    } catch (error){
+      res.json({status:"error", message:error.message});
+    }
+  };
+};

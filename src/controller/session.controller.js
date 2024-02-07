@@ -63,4 +63,17 @@ export class SessionsController{
             res.json({status:"error", message:error.message});
         }
     };
+
+    static logout = async(req,res)=>{
+        console.log(req.user);
+        const user = {...req.user};
+        user.last_connection = new Date();
+        await UsersService.updateUser(user._id, user);
+        req.session.destroy((error)=>{
+            res.send("sesion finalizada");
+        });
+    };
+
+
+    
 }

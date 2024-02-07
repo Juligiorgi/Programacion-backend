@@ -24,9 +24,33 @@ const userSchema = new mongoose.Schema({
     },
     role:{
         type:String,
-        enum:["user","admin"],
+        enum:["user","admin", "premium"],
         default:"user"
+    },
+    documents:{
+        type:[
+            {
+                name:{type:String, required:true},
+                reference:{type:String, required:true}
+            }
+        ],
+        default:[]
+    },
+    last_connection:{
+        type:Date,
+        default:null
+    },
+    status:{
+        type: String,
+        required: true,
+        enum:["pendiente", "incompleto","completo"],
+        default:"pendiente"
+    },
+    avatar:{
+        type:String,
+        default:''
     }
+
 });
 
 export const usersModel = mongoose.model(usersCollection,userSchema);

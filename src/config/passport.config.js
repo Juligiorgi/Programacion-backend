@@ -28,7 +28,8 @@ export const initializePassport = () =>{
                     lastname,
                     age,
                     email:username,
-                    password:createHash(password)
+                    password:createHash(password),
+                    avatar: req.file.filename
                 };
                 const userCreated = await usersModel.addUser(newUser);
                 return done (null, userCreated);
@@ -54,6 +55,8 @@ export const initializePassport = () =>{
                     return done(null,false);
                 }
                 //validamos que el usuario esta registrado y que la contraseña es correcta
+                user. last_connection = new Date();
+                await usersDao.updateUser(user._id, user);
                 return done(null,user);
             } catch (error) {
                 return done(error);

@@ -7,12 +7,14 @@
 <p>{{error}}</p>
 
 
-<form method="post" action="/api/sessions/singup">
+<form method="post" action="/api/sessions/singup" enctype="multipart/form-data">
   <input type="text" name="firtsname" placeholder="Tu nombre">
   <br/><br/>
   <input type="email" name="email" placeholder="Tu correo">
   <br/><br/>
   <input type="password" name="password" placeholder="Tu contraseña">
+  <br/><br/>
+  <input type="file" name="avatar">
   <br/><br/>
   <button>Registrarse</button>
 </form>
